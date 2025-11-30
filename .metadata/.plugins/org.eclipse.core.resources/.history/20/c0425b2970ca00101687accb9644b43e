@@ -1,0 +1,39 @@
+/*
+ * global.h
+ *
+ *  Created on: Nov 25, 2025
+ *      Author: MinhTri
+ */
+
+#ifndef INC_GLOBAL_H_
+#define INC_GLOBAL_H_
+#include "main.h"
+#include "software_timer.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define INIT                 0
+#define READING              1
+#define PARSING              2
+
+#define RST                  10
+#define OK                   11
+
+#define MAX_BUFFER_SIZE      30
+#define MAX_COMMAND_SIZE     4
+#define CMD_TIMEOUT          500
+
+extern uint8_t buffer_character;
+extern uint8_t buffer[MAX_BUFFER_SIZE];
+extern uint8_t buffer_index;
+extern uint8_t buffer_flag;
+
+extern ADC_HandleTypeDef hadc1;
+extern UART_HandleTypeDef huart2;
+
+void command_parser_fsm();
+void uart_communication_fsm();
+
+#endif /* INC_GLOBAL_H_ */

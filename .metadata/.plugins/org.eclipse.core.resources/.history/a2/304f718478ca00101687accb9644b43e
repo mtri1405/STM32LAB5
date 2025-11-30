@@ -1,0 +1,17 @@
+/*
+ * fsm.c
+ *
+ *  Created on: Nov 25, 2025
+ *      Author: MinhTri
+ */
+
+#include <global.h>
+
+// Global variables for UART communication
+uint8_t buffer_character;
+uint8_t buffer_index = 0;
+uint8_t buffer_flag = 0;
+
+uint8_t status = WAITING;
+uint8_t command_status = INIT;
+uint8_t command_data[MAX_COMMAND_SIZE];

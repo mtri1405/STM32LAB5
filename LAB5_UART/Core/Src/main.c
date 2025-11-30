@@ -18,12 +18,13 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "software_timer.h"
-#include "fsm.h"
+#include <global.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,16 +68,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if (huart->Instance == USART2)
 	{
-		// Retransmit the received character through UART
-		HAL_UART_Transmit(&huart2, &buffer_character, 1, 500);
-		buffer[buffer_index] = buffer_character;
-		buffer_index = (buffer_index + 1) % MAX_BUFFER_SIZE;
+		// Echo character back
+		HAL_UART_Transmit(&huart2, &buffer_character, 1, 50);
 		
-		// Only set flag if not already processing
+		// Set flag to process command only if not already processing
 		if (buffer_flag == 0) {
 			buffer_flag = 1;
 		}
-		// Allow UART receive next character without waiting for callback function finish
+		// Allow UART receive next character without waiting for callback
 		HAL_UART_Receive_IT(&huart2, &buffer_character, 1);
 	}
 }

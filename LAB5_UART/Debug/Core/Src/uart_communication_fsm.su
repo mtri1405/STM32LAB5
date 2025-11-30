@@ -1,0 +1,3 @@
+uart_communication_fsm.c:10:6:cmdEqualRST	16	static
+uart_communication_fsm.c:14:6:cmdEqualOK	16	static
+uart_communication_fsm.c:17:6:uart_communication_fsm	112	static

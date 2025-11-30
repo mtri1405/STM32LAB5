@@ -1,0 +1,23 @@
+/*
+ * fsm.c
+ *
+ *  Created on: Nov 25, 2025
+ *      Author: MinhTri
+ */
+
+#include "fsm.h"
+
+
+uint8_t buffer_character;
+uint8_t buffer[MAX_BUFFER_SIZE];
+bool cmdEqualRST(uint8_t str[]){
+	if (strcmp((char*)str, "RST") == 0){
+		return true;
+	}
+	else return false;
+}
+
+bool cmdEqualOK(uint8_t str[]){
+	if (strcmp((char*) str, "OK") == 0) return true;
+	else return false;
+}

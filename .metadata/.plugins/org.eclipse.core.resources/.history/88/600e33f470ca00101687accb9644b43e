@@ -1,0 +1,40 @@
+/*
+ * uart_communication_fsm.c
+ *
+ *  Created on: Nov 26, 2025
+ *      Author: MinhTri
+ */
+#include "uart_communication_fsm.h"
+
+void uart_communication_fsm() {
+	static int last_ADC_value = 0;
+	static uint8_t active_flag = 0;
+	char str[100];
+
+	switch (command_status) {
+	case RST:
+		if (active_flag == 0) {
+			last_ADC_value = HAL_ADC_GetValue(&hadc1);
+			active_flag = 1;
+		}
+		if (isTimeExpired(1)) {
+			HAL_UART_Transmit(&huart2, (void*) str,
+					sprintf(str, "!ADC=%d#\r\n", last_ADC_value), 1000);
+			setTimer(1, 300);
+		}
+		break;
+
+	case OK:
+		active_flag = 0;
+		command_status = INIT;
+		break;
+
+	default:
+		if (active_flag && isTimeExpired(1)) {
+			HAL_UART_Transmit(&huart2, (void*) str,
+					sprintf(str, "!ADC=%d#\r\n", last_ADC_value), 1000);
+			setTimer(1, 300);
+		}
+		break;
+	}
+}

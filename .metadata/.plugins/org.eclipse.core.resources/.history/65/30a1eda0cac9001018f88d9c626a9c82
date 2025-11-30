@@ -1,0 +1,42 @@
+/*
+ * fsm.c
+ *
+ *  Created on: Nov 25, 2025
+ *      Author: MinhTri
+ */
+
+#include "fsm.h"
+
+// Global
+uint8_t buffer_character;
+uint8_t buffer[MAX_BUFFER_SIZE];
+uint8_t buffer_index = 0;
+uint8_t buffer_flag = 0;
+
+// Local
+uint8_t status = INIT;
+uint8_t command_status = INIT;
+uint8_t command_data[MAX_COMMAND_SIZE];
+uint8_t command_data_index = 0;
+
+
+bool cmdEqualRST(uint8_t str[]){
+	if (strcmp((char*)str, "RST") == 0){
+		return true;
+	}
+	else return false;
+}
+
+bool cmdEqualOK(uint8_t str[]){
+	if (strcmp((char*) str, "OK") == 0) return true;
+	else return false;
+}
+
+
+void command_parser_fsm(){
+
+}
+void uart_communication(){
+	static int last_ADC_value = 0;
+
+}

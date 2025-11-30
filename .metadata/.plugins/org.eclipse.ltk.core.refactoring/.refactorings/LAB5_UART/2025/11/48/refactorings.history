@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;LAB5_UART/Core/Inc/fsm.h&apos; to &apos;global.h&apos;" description="Rename resource &apos;fsm.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Core/Inc/fsm.h" name="global.h" stamp="1764124272652" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;LAB5_UART/Core/Src/fsm.c&apos; to &apos;global.c&apos;" description="Rename resource &apos;fsm.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Core/Src/fsm.c" name="global.c" stamp="1764124285682" updateReferences="true"/>
+</session>

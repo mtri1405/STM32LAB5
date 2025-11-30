@@ -1,0 +1,97 @@
+/*
+ * fsm.c
+ *
+ *  Created on: Nov 25, 2025
+ *      Author: MinhTri
+ */
+
+#include "fsm.h"
+
+// Global
+uint8_t buffer_character;
+uint8_t buffer[MAX_BUFFER_SIZE];
+uint8_t buffer_index = 0;
+uint8_t buffer_flag = 0;
+
+// Local
+uint8_t status = INIT;
+uint8_t command_status = INIT;
+uint8_t command_data[MAX_COMMAND_SIZE];
+uint8_t command_data_index = 0;
+
+bool cmdEqualRST(uint8_t str[]) {
+	if (strcmp((char*) str, "RST") == 0) {
+		return true;
+	} else
+		return false;
+}
+
+bool cmdEqualOK(uint8_t str[]) {
+	if (strcmp((char*) str, "OK") == 0)
+		return true;
+	else
+		return false;
+}
+
+void command_parser_fsm() {
+	switch (status) {
+	case INIT:
+		if (buffer_character == '!') status =  READING;
+		break;
+	case READING:
+		if (buffer_character != '!' || buffer_character != '#'){
+			command_data[command_data_index] = buffer_character;
+			command_data_index++;
+		}
+		if (buffer_character == '#'){
+			status = PARSING;
+			command_data[command_data_index] = '\0';
+			command_data_index = 0;
+		}
+		break;
+	case PARSING:
+		if (cmdEqualRST(command_data) == true){
+			command_status = RST;
+		}
+		if (cmdEqualOK(command_data) == true){
+			command_status = OK;
+		}
+		status = INIT;
+		break;
+	default:
+		break;
+	}
+}
+void uart_communication_fsm() {
+	static int last_ADC_value = 0;
+	static uint8_t active_flag = 0;
+	char str[100];
+
+	switch (command_status) {
+	case RST:
+		if (active_flag == 0) {
+			last_ADC_value = HAL_ADC_GetValue(&huart2);
+			active_flag = 1;
+		}
+		if (isTimeExpired(1)) {
+			HAL_UART_Transmit(&huart2, (void*) str,
+					sprintf(str, "!ADC=%d#\r\n", last_ADC_value), 1000);
+			setTimer(1, 300);
+		}
+
+		break;
+	case OK:
+		active_flag = 0;
+		command_status = INIT;
+		break;
+
+	default:
+		if (active_flag && isTimeExpired(1)) {
+			HAL_UART_Transmit(&huart2, (void*) str,
+					sprintf(str, "!ADC=%d#\r\n", last_ADC_value), 1000);
+			setTimer(1, 300);
+		}
+		break;
+	}
+
+}
